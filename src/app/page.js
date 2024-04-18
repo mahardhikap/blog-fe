@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import Link from 'next/link';
+import FormData from '@/components/form/formData';
+import ListCard from '@/components/card/listCard';
 
 export default function Home() {
   const [dataArray, setDataArray] = useState([
@@ -97,72 +98,27 @@ export default function Home() {
       <h2 className="text-center font-bold">
         {isUpdating ? 'Update Data' : 'Post Data'}
       </h2>
-      <form onSubmit={isUpdating ? handleUpdate : handlePost}>
-        <label htmlFor="newTitle">Title</label>
-        <input
-          type="text"
-          id="newTitle"
-          value={newTitle}
-          onChange={handleTitleChange}
-          className="w-full p-3 border-2 border-black rounded-lg"
-          required
-        />
-        <label htmlFor="newContent">Content</label>
-        <textarea
-          id="newContent"
-          value={newContent}
-          onChange={handleContentChange}
-          className="w-full p-3 border-2 border-black rounded-lg"
-          required
-        />
-        <button
-          type="submit"
-          className="font-bold p-3 w-full bg-green-400 rounded-lg text-white hover:bg-green-600"
-        >
-          {isUpdating ? 'Update Data' : 'Post Data'}
-        </button>
-      </form>
+      <FormData
+        onSubmit={isUpdating ? handleUpdate : handlePost}
+        onValueTitle={newTitle}
+        onHandleTitleChange={handleTitleChange}
+        onValueContent={newContent}
+        onHandleContentChange={handleContentChange}
+        onButtonStatus={isUpdating ? 'Update Data' : 'Post Data'}
+      />
       <div className="my-10">
         {dataArray.map((item, index) => (
-          <div key={index}>
-            <Link href={{ pathname: `/detail`, query: dataArray[index] }}>
-              <div className="p-2 black rounded-lg shadow-md border cursor-pointer">
-                <div className="font-bold text-xl truncate">{item.title}</div>
-                <div className="font-medium break-all">
-                  {item.content.slice(0, 100)}
-                  {item.content.length > 50 ? '...' : ''}
-                  <p className="text-blue-400 hover:text-blue-600">
-                    {item.content.length > 50 ? 'read more' : ''}
-                  </p>
-                </div>
-                <div className="text-sm text-right">{item.published}</div>
-              </div>
-            </Link>
-            <div className="mt-2 mb-5 flex gap-4">
-              <button
-                onClick={() => indexChoosen(index)}
-                className="p-2 bg-yellow-500 rounded text-white font-medium"
-              >
-                Update
-              </button>
-              {isUpdating && (
-                <button
-                  onClick={handleCancelUpdate}
-                  className="p-2 bg-blue-500 rounded text-white font-medium"
-                >
-                  Cancel Update
-                </button>
-              )}
-              {!isUpdating && (
-                <button
-                  onClick={() => handleDeletePost(item.id)}
-                  className="p-2 bg-red-500 rounded text-white font-medium"
-                >
-                  Delete
-                </button>
-              )}
-            </div>
-          </div>
+          <ListCard
+            key={index}
+            onQuery={dataArray[index]}
+            onTitle={item.title}
+            onItemContent={item.content}
+            onPublished={item.published}
+            onIndexChoosen={() => indexChoosen(index)}
+            onCancelUpdate={handleCancelUpdate}
+            onDeletePost={() => handleDeletePost(item.id)}
+            onUpdate={isUpdating}
+          />
         ))}
       </div>
     </div>
