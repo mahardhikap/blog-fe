@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [dataArray, setDataArray] = useState([
@@ -124,17 +125,19 @@ export default function Home() {
       <div className="my-10">
         {dataArray.map((item, index) => (
           <div key={index}>
-            <div className="p-2 black rounded-lg shadow-md border cursor-pointer">
-              <div className="font-bold text-xl truncate">{item.title}</div>
-              <div className="font-medium break-all">
-                {item.content.slice(0, 100)}
-                {item.content.length > 50 ? '...' : ''}
-                <p className="text-blue-400 hover:text-blue-600">
-                  {item.content.length > 50 ? 'read more' : ''}
-                </p>
+            <Link href={{ pathname: `/detail`, query: dataArray[index] }}>
+              <div className="p-2 black rounded-lg shadow-md border cursor-pointer">
+                <div className="font-bold text-xl truncate">{item.title}</div>
+                <div className="font-medium break-all">
+                  {item.content.slice(0, 100)}
+                  {item.content.length > 50 ? '...' : ''}
+                  <p className="text-blue-400 hover:text-blue-600">
+                    {item.content.length > 50 ? 'read more' : ''}
+                  </p>
+                </div>
+                <div className="text-sm text-right">{item.published}</div>
               </div>
-              <div className="text-sm text-right">{item.published}</div>
-            </div>
+            </Link>
             <div className="mt-2 mb-5 flex gap-4">
               <button
                 onClick={() => indexChoosen(index)}
